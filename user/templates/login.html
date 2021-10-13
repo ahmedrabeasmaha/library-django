@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+        <title>Amazon Store</title>
+{% endblock %}
+{% block content %}
+<div class="container py-4 py-lg-5 my-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <h2 class="h4 mb-4">Sign in</h2>
+                    <hr>
+                    <form novalidate="" class="fs-base pt-4 pb-2 needs-validation" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-4"><i class="ci-mail position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
+                            {{ log_form.username }}
+                        </div>
+                        <div class="input-group mb-4">
+                            <i class="ci-locked position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
+                            <div class="password-toggle w-100">
+                                {{ log_form.password }}
+                                <label class="password-toggle-btn" aria-label="Show/hide password">
+                                <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap justify-content-between">
+                            <a class="nav-link-inline fs-sm" href="account-password-recovery.html">Forgot password?</a>
+                        </div>
+                        <hr class="mt-4">
+                        <div class="text-end pt-4">
+                            <button class="btn btn-primary" name="submit" value="login" type="submit"><i class="ci-sign-in me-2 ms-n21"></i>Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 pt-4 mt-3 mt-md-0">
+            <h2 class="h4 mb-3">No account? Sign up</h2>
+            <p class="fs-sm text-muted mb-4">Registration takes less than a minute but gives you full control over your orders.</p>
+            {% if reg_form.errors %}
+            <form class="needs-validation was-validated" method="POST" name="{{ form.perfix }}">
+            {% else %}
+            <form class="needs-validation" method="POST" name="{{ form.perfix }}">
+            {% endif %}
+                {% csrf_token %}
+                <div class="row gx-4 gy-3">
+                    <div class="col-mb-3">
+                        <label class="form-label" for="reg-fn">Username</label>
+                        {# <input class="form-control" type="text" required="" name="{{ form.username.name }}" id="id_{{ form.username.name }}"> #}
+                        {{ reg_form.username }}
+                        <div class="invalid-feedback">{{ reg_form.username.errors.0 }}</div>
+                    </div>
+                    <div class="col-mb-3">
+                        <label class="form-label" for="reg-email">E-mail Address</label>
+                        {# <input class="form-control" type="email" required="" name="{{ form.email.name }}" id="id_{{ form.email.name }}"> #}
+                        {{ reg_form.email }}
+                        <div class="invalid-feedback">{{ reg_form.email.errors.0 }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" for="reg-password">Password</label>
+                        {# <input class="form-control" type="password" required="" name="{{ form.password1.name }}" id="id_{{ form.password1.name }}"> #}
+                        {{ reg_form.password1 }}
+                        <div class="invalid-feedback">{{ reg_form.password1.errors.0 }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" for="reg-password-confirm">Confirm Password</label>
+                        {# <input class="form-control" type="password" required="" name="{{ form.password2.name }}" id="id_{{ form.password2.name }}"> #}
+                        {{ reg_form.password2 }}
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-primary" type="submit" name="submit" value="register"><i class="ci-user me-2 ms-n1"></i>Sign Up</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

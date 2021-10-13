@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/lightgallery.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/simplebar.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/theme.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+        <link rel="mask-icon" href="{% static 'images/safari-pinned-tab.svg' %}" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="{% static 'images/mstile-144x144.png' %}">
+        <meta name="theme-color" content="#ffffff">
+        {% block title %}
+        {% endblock %}
+    </head>
+    <body class="handheld-toolbar-enabled">
+        <main class="page-wrapper">
+            <header class="bg-light shadow-sm navbar-sticky navbar-stuck">
+                <div class="navbar navbar-expand-lg navbar-light">
+                    <div class="container">
+                        <a class="navbar-brand d-none d-sm-block flex-shrink-0 me-4 order-lg-1" href="{% url 'home' %}"><img src="{% static 'images\logo.png' %}" alt="Amazon" width="142"></a><a class="navbar-brand d-sm-none me-2 order-lg-1" href="index.html"><img src="{% static 'images\logo.png' %}" alt="Cartzilla" width="74"></a>
+                        <div class="navbar-toolbar d-flex align-items-center order-lg-3">
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"><span class="navbar-toggler-icon"></span></button>
+                            {% if user.is_authenticated and user.is_staff %}
+                            <div class="navbar-tool dropdown ms-2">
+                                <span class="navbar-tool-icon-box border dropdown-toggle"><img src="{{ pic.url }}" width="32"></span><span class="navbar-tool-text ms-n1">{{ base_user.username }}</span>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <div style="min-width: 14rem;">
+                                        <h6 class="dropdown-header">Dashboard</h6>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'users' %}"><i class="ci-user opacity-60 me-2"></i>Students</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'all_books' %}"><i class="ci-book opacity-60 me-2"></i>All Books</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'borrowed_books' %}"><i class="ci-book opacity-60 me-2"></i>Borrowed books</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'add_book' %}"><i class="ci-cloud-upload opacity-60 me-2"></i>Add new book</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'password' %}"><i class="ci-key opacity-60 me-2"></i>Change password</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'logout_user' %}"><i class="ci-sign-out opacity-60 me-2"></i>Sign Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% elif user.is_authenticated and not user.is_staff %}
+                            <div class="navbar-tool dropdown ms-2">
+                                <span class="navbar-tool-icon-box border dropdown-toggle"><img src="{{ pic.url }}" width="32"></span><span class="navbar-tool-text ms-n1">{{ base_user.username }}</span>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <div style="min-width: 14rem;">
+                                        <h6 class="dropdown-header">Dashboard</h6>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'borrowed_books' %}"><i class="ci-book opacity-60 me-2"></i>Borrowed books</a>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'edit_profile' %}"><i class="ci-book opacity-60 me-2"></i>Edit Profile</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item d-flex align-items-center" href="{% url 'logout_user' %}"><i class="ci-sign-out opacity-60 me-2"></i>Sign Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <a class="navbar-tool ms-1 ms-lg-0 me-n1 me-lg-2" href="{% url 'login_user' %}">
+                                <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
+                                <div class="navbar-tool-text ms-n3"><small>Hello, Sign in</small>My Account</div>
+                            </a>
+                            {% endif %}
+                        </div>
+                        <div class="collapse navbar-collapse me-auto order-lg-2" id="navbarCollapse">
+                            <div class="input-group d-lg-none my-3"><i class="ci-search position-absolute top-50 start-0 translate-middle-y text-muted fs-base ms-3"></i>
+                                <input class="form-control rounded-start" type="text" placeholder="Search marketplace">
+                            </div>
+                            <ul class="navbar-nav navbar-mega-nav pe-lg-2 me-lg-2">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle ps-lg-0" href="#" data-bs-toggle="dropdown"><i class="ci-menu align-middle mt-n1 me-2"></i>Categories</a>
+                                    <ul class="dropdown-menu py-1">
+                                        {% for category in main_category %}
+                                        <li class="dropdown"><a class="dropdown-item" href="{% url 'category' category.id %}">{{ category.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-box collapse" id="searchBox">
+                    <div class="card pt-2 pb-4 border-0 rounded-0">
+                        <div class="container">
+                            <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y text-muted fs-base ms-3"></i>
+                                <input class="form-control rounded-start" type="text" placeholder="Search marketplace">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer class="footer bg-dark pt-5">
+            <div class="container pt-2 pb-3">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-4">
+                        <div class="text-nowrap mb-3"><a class="d-inline-block align-middle mt-n2 me-2" href="#"><img class="d-block" src="{% static 'images\logo.png' %}" alt="Cartzilla" width="117"></a><span class="d-inline-block align-middle h5 fw-light text-white mb-0">Marketplace</span></div>
+                        <p class="fs-sm text-white opacity-70 pb-1">High quality items created by our global community.</p>
+                        <h6 class="d-inline-block pe-3 me-3 border-end border-light"><span class="text-primary">65,478 </span><span class="fw-normal text-white">Products</span></h6>
+                        <h6 class="d-inline-block pe-3 me-3 border-end border-light"><span class="text-primary">2,521 </span><span class="fw-normal text-white">Members</span></h6>
+                        <h6 class="d-inline-block me-3"><span class="text-primary">897 </span><span class="fw-normal text-white">Vendors</span></h6>
+                        <div class="widget mt-4 text-md-nowrap text-center text-md-start"><a class="btn-social bs-light bs-twitter me-2 mb-2" href="#"><i class="ci-twitter"></i></a><a class="btn-social bs-light bs-facebook me-2 mb-2" href="#"><i class="ci-facebook"></i></a><a class="btn-social bs-light bs-dribbble me-2 mb-2" href="#"><i class="ci-dribbble"></i></a><a class="btn-social bs-light bs-behance me-2 mb-2" href="#"><i class="ci-behance"></i></a><a class="btn-social bs-light bs-pinterest me-2 mb-2" href="#"><i class="ci-pinterest"></i></a></div>
+                    </div>
+                    <div class="col-12 d-md-none text-center mb-4 pb-2">
+                        <div class="btn-group dropdown d-block mx-auto mb-3">
+                            <button class="btn btn-outline-light border-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Categories</button>
+                            <ul class="dropdown-menu my-1">
+                                {% for category in main_category %}
+                                <li><a class="dropdown-item" href="">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="btn-group dropdown d-block mx-auto">
+                            <button class="btn btn-outline-light border-light dropdown-toggle" type="button" data-bs-toggle="dropdown">For members</button>
+                            <ul class="dropdown-menu my-1">
+                                <li><a class="dropdown-item" href="#">Licenses</a></li>
+                                <li><a class="dropdown-item" href="#">Return policy</a></li>
+                                <li><a class="dropdown-item" href="#">Payment methods</a></li>
+                                <li><a class="dropdown-item" href="#">Become a vendor</a></li>
+                                <li><a class="dropdown-item" href="#">Become an affiliate</a></li>
+                                <li><a class="dropdown-item" href="#">Marketplace benefits</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-none d-md-block text-center text-md-start mb-4">
+                        <div class="widget widget-links widget-light pb-2">
+                            <h3 class="widget-title text-light">Categories</h3>
+                            <ul class="widget-list">
+                                {% for category in main_category %}
+                                <li class="widget-list-item"><a class="widget-list-link" href="{% url 'category' category.id %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-none d-md-block text-center text-md-start mb-4">
+                        <div class="widget widget-links widget-light pb-2">
+                            <h3 class="widget-title text-light">For members</h3>
+                            <ul class="widget-list">
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Licenses</a></li>
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Return policy</a></li>
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Payment methods</a></li>
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Become a vendor</a></li>
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Become an affiliate</a></li>
+                                <li class="widget-list-item"><a class="widget-list-link" href="#">Marketplace benefits</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-5 bg-darker">
+                <div class="container">
+                    <hr class="hr-light mb-3">
+                    <div class="d-md-flex justify-content-between pt-4">
+                        <div class="pb-4 fs-xs text-light opacity-50 text-center text-md-start">© All rights reserved. Made by <a class="text-light" href="https://iti.gov.eg" target="_blank" rel="noopener">ITI</a></div>
+                        <div class="widget widget-links widget-light pb-4">
+                            <ul class="widget-list d-flex flex-wrap justify-content-center justify-content-md-start">
+                                <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Help Center</a></li>
+                                <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Affiliates</a></li>
+                                <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Support</a></li>
+                                <li class="widget-list-item ms-4"><a class="widget-list-link fs-ms" href="#">Terms &amp; Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <a class="btn-scroll-top" href="#top" data-scroll=""><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/smooth-scroll.polyfills.min.js' %}"></script>
+        <script src="{% static 'js/simplebar.min.js' %}"></script>
+        <script src="{% static 'js/min/tiny-slider.js' %}"></script>
+        <script src="{% static 'js/sourcemaps/tiny-slider.js' %}"></script>
+        <script src="{% static 'js/lightgallery.min.js' %}"></script>
+        <script src="{% static 'js/lg-fullscreen.min.js' %}"></script>
+        <script src="{% static 'js/lg-zoom.min.js' %}"></script>
+        <script src="{% static 'js/theme.min.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+    </body>
+</html>
